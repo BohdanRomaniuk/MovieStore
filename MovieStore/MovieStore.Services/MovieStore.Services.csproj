@@ -8,8 +8,4 @@
     <ProjectReference Include="..\MovieStore.DataAccess\MovieStore.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>
