@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MovieStore.DataAccess;
+using MovieStore.Services;
 
 namespace MovieStore
 {
@@ -23,18 +24,20 @@ namespace MovieStore
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("MovieStoreDbConnection");
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<MovieStoreContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            //Services (BL)
+            services.AddScoped<IMovieService, MovieService>();
+            //Services (BL)
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

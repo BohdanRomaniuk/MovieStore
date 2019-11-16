@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieStore", "MovieStore\MovieStore.csproj", "{F03206C0-8ABE-48AD-8E0F-9CED27A5CEEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieStore.API", "MovieStore\MovieStore.API.csproj", "{F03206C0-8ABE-48AD-8E0F-9CED27A5CEEE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieStore.DataAccess", "MovieStore.DataAccess\MovieStore.DataAccess.csproj", "{A08D0B0F-ADF6-4BAA-86F7-7B74937658CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieStore.Services", "MovieStore.Services\MovieStore.Services.csproj", "{2B2E7686-5523-4830-BF3D-B668C20D1E2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A08D0B0F-ADF6-4BAA-86F7-7B74937658CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A08D0B0F-ADF6-4BAA-86F7-7B74937658CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A08D0B0F-ADF6-4BAA-86F7-7B74937658CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B2E7686-5523-4830-BF3D-B668C20D1E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B2E7686-5523-4830-BF3D-B668C20D1E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B2E7686-5523-4830-BF3D-B668C20D1E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B2E7686-5523-4830-BF3D-B668C20D1E2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

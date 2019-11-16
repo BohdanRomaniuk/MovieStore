@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MovieStore.DataAccess;
+using MovieStore.Services;
 
 namespace MovieStore.Controllers
 {
@@ -11,8 +12,8 @@ namespace MovieStore.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        public readonly IUnitOfWork unit;
-        public ValuesController(IUnitOfWork work)
+        public readonly IMovieService unit;
+        public ValuesController(IMovieService work)
         {
             unit = work;
         }
@@ -20,8 +21,8 @@ namespace MovieStore.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Movie>> Get()
         {
-            var repo = unit.GetRepository<Movie>();
-            return repo.Get().ToList();
+            var repo = unit.Get();
+            return repo.ToList();
         }
 
         [HttpGet("{id}")]
