@@ -1,5 +1,6 @@
 ﻿using MovieStore.DataAccess;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace MovieStore.Services
@@ -11,9 +12,20 @@ namespace MovieStore.Services
         {
         }
 
+        public override IEnumerable<Movie> Get()
+        {
+            return Repository.Get()
+                .Include(c => c.Comments)
+                .Include(c => c.MovieRates)
+                .ToList();
+        }
+
         public override Movie Get(int id)
         {
-            return Repository.Get(m => m.Id == id).FirstOrDefault();
+            return Repository.Get(m => m.Id == id)
+                .Include(c => c.Comments)
+                .Include(c => c.MovieRates)
+                .FirstOrDefault();
         }
 
         public override void Remove(int id)
