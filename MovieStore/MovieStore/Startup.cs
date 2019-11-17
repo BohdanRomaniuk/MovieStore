@@ -33,6 +33,8 @@ namespace MovieStore
 
             //Services (BL)
             services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IUserService, UserService>();
             //Services (BL)
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

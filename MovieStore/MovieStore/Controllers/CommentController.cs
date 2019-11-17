@@ -6,9 +6,9 @@ namespace MovieStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MovieController : BaseController<Movie>
+    public class CommentController : BaseController<Comment>
     {
-        public MovieController(IMovieService service)
+        public CommentController(ICommentService service)
             : base(service)
         {
         }
