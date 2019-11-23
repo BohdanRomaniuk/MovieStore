@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MovieStore.DataAccess;
 using MovieStore.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace MovieStore
 {
@@ -38,6 +39,10 @@ namespace MovieStore
             //Services (BL)
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("MovieStore", new Info { Title = "MovieStore API", Version = "1.0" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -63,6 +68,13 @@ namespace MovieStore
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            // Swagger is here: localhost/swagger/index.html
+            app.UseSwagger();
+            app.UseSwaggerUI(c => 
+            {
+                c.SwaggerEndpoint("/swagger/MovieStore/swagger.json", "MovieStore API");
+            });
         }
     }
 }
