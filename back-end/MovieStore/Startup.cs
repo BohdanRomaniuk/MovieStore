@@ -51,6 +51,16 @@ namespace MovieStore
                 app.UseHsts();
             }
 
+            // This automatically migrates DB
+            // Code to create migration in Package manager console:
+            //     PM> add-migration <name> -project MovieStore.DataAccess
+            // Migration will be applied automatically!
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<MovieStoreContext>();
+                context.Database.Migrate();
+            }
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
