@@ -29,7 +29,7 @@ namespace MovieStore.API.Controllers
 
             var identityDTO = _userService.GetUserIdentity(user.Username);
 
-            if (identityDTO != null)
+            if (identityDTO == null)
                 return BadRequest("Cannot get identity for this user.");
 
             var identity = GetClaimsIdentity(identityDTO);
