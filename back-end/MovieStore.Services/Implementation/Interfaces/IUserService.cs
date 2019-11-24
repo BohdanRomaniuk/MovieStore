@@ -7,5 +7,6 @@ namespace MovieStore.Services
     {
         bool ValidateUserPassword(UserLoginDTO user);
         UserIdentityDTO GetUserIdentity(string username);
+        UserIdentityDTO CreateUser(UserRegistrationDTO user);
     }
 }

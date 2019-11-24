@@ -12,6 +12,38 @@ namespace MovieStore.Services
         {
         }
 
+        public UserIdentityDTO CreateUser(UserRegistrationDTO user)
+        {
+            if (Repository.Get(u => u.UserName == user.UserName).Any())
+                return null;
+
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+            Repository.Add(new User
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Role = "user",
+                UserName = user.UserName,
+                HashedPassword = passwordHash
+            });
+
+            _unitOfWork.SaveChanges();
+
+            User savedUser = Repository.Get(u => u.UserName == user.UserName).FirstOrDefault();
+
+            return savedUser != null 
+                ?  new UserIdentityDTO 
+                {
+                    Id = savedUser.Id,
+                    UserName = savedUser.UserName,
+                    Role = savedUser.Role,
+                    FirstName = savedUser.FirstName,
+                    LastName = savedUser.LastName
+                }
+                : null;
+        }
+
         public override IEnumerable<User> Get()
         {
             return Repository.Get()
@@ -47,10 +79,11 @@ namespace MovieStore.Services
 
         public bool ValidateUserPassword(UserLoginDTO user)
         {
-            // TODO: validate hashed password in database. FOr now return true if usernames match
-            if (Repository.Get(u => u.UserName == user.Username).Any())
-                return true;
-            return false;
+            User dbUser = Repository.Get(u => u.UserName == user.Username).FirstOrDefault();
+            if (dbUser == null)
+                return false;
+
+            return BCrypt.Net.BCrypt.Verify(user.Password, dbUser.HashedPassword);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MovieStore.Authentication;
@@ -18,6 +19,7 @@ namespace MovieStore.API.Controllers
             _userService = userService;
         }
 
+        // Todo: it would be nice to have nicer routes here...
         [HttpPost("/token")]
         public IActionResult Token([FromBody] UserLoginDTO user)
         {
@@ -39,7 +41,32 @@ namespace MovieStore.API.Controllers
             return Ok(token);
         }
 
+        /// <summary>
+        /// Regsters user. Each user is registered in "user" role, admin
+        /// can change it in future.
+        /// </summary>
+        /// <param name="user">DTO with username, password, firstname and lastname</param>
+        /// <returns>id of the user stored in database in header and token in body</returns>
+        [HttpPost("/register")]
+        public IActionResult Register([FromBody] UserRegistrationDTO user)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            if(_userService.Get(u => u.UserName == user.UserName).Any())
+                return BadRequest("User already exists.");
+
+            var registeredUser = _userService.CreateUser(user);
+            
+            if (registeredUser == null)
+                return BadRequest("User registration failure.");
+
+            var identity = GetClaimsIdentity(registeredUser);
+
+            string token = JWTManager.GenerateToken(identity);
+
+            return Created(registeredUser.Id.ToString(), token);
+        }
 
         private ClaimsIdentity GetClaimsIdentity(UserIdentityDTO user)
         {

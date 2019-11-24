@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MovieStore.DataAccess\MovieStore.DataAccess.csproj" />
     <ProjectReference Include="..\MovieStore.DTO\MovieStore.DataTransfer.csproj" />
   </ItemGroup>
