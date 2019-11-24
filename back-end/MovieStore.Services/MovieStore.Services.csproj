@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MovieStore.DataAccess\MovieStore.DataAccess.csproj" />
+    <ProjectReference Include="..\MovieStore.DTO\MovieStore.DataTransfer.csproj" />
   </ItemGroup>
 
 </Project>
