@@ -1,26 +1,27 @@
-import React, { Component } from 'react';
-import { Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import React, {Component} from 'react';
+import {Card} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 import apiUrl from '../Constants';
 
-export class Home extends Component {
+export class Movie extends Component {
     constructor(props) {
         super(props);
         this.state = {
             error: null,
             isLoaded: false,
-            movies: []
+            movieId : parseInt(props.match.params.movieId, 10) || 1,
+            movieInfo: {}
         };
     }
 
     componentDidMount() {
-        fetch(`${apiUrl}/movie`)
+        fetch(`${apiUrl}/movie/${this.state.movieId}`)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({
                         isLoaded: true,
-                        movies: result
+                        movieInfo: result
                     });
                 },
                 (error) => {
@@ -29,24 +30,24 @@ export class Home extends Component {
                         error
                     });
                 }
-            )
+            );
     }
 
     render() {
-        const { movies } = this.state;
-        console.log(movies);
+        const { movieInfo, movieId } = this.state;
         return (
             <div style={{ margin: '10px auto' }}>
-                {movies.map(movie => (
                     <Card style={{ width: '18rem' }}>
-                        <Link to={"/movie/" + movie.id}>
-                            <Card.Img variant="top" src={movie.poster} />
+                        <Link to={"/movie/" + movieId}>
+                            <Card.Img variant="top" src={movieId} />
                         </Link>
                         <Card.Body>
-                            <Card.Title><Link to={"/movie/" + movie.id}>{movie.ukrName} - {movie.originName} ({movie.year})</Link></Card.Title>
+                            <Card.Title><Link to={"/movie/" + movieId}>{movieInfo.ukrName} - {movieInfo.originName} ({movieInfo.year})</Link></Card.Title>
                         </Card.Body>
-                    </Card>))}
+                    </Card>
             </div>
         );
     }
 }
+
+export default Movie
