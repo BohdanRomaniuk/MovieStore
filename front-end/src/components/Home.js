@@ -38,9 +38,9 @@ export class Home extends Component {
         return (
             <div style={{ margin: '10px auto' }}>
                 {movies.map(movie => (
-                    <Card style={{ width: '18rem' }}>
+                    <Card style={{ width: '16rem', float: 'left', marginRight: '10px', marginBottom: '10px' }}>
                         <Link to={"/movie/" + movie.id}>
-                            <Card.Img variant="top" src={movie.poster} />
+                            <Card.Img variant="top" src={movie.poster}/>
                         </Link>
                         <Card.Body>
                             <Card.Title><Link to={"/movie/" + movie.id}>{movie.ukrName} - {movie.originName} ({movie.year})</Link></Card.Title>

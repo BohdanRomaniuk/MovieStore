@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const Styles = styled.form`
   form {
-    margin: 30px auto;
+    margin: 0 auto;
     max-width: 400px;
   }
 `;

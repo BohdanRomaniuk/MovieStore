@@ -5,14 +5,19 @@ import styled from 'styled-components';
 
 const Styles = styled.div`
   .navbar {
-    background-color: #222;
+    padding: 5px;
+    background-color: #20232a !important;
   }
 
-  a, .navbar-brand, .navbar-nav .nav-link {
+  .navbar-brand {
+    color: #28a745;
+  }
+  
+  a, .navbar-nav .nav-link {
     color: #bbb;
 
     &:hover {
-      color: white;
+      color: #28a745;
       text-decoration: none;
     }
   }
