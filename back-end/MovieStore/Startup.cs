@@ -51,6 +51,10 @@ namespace MovieStore
                 app.UseHsts();
             }
 
+            app.UseCors(builder => builder.WithOrigins(Configuration.GetSection("ReactAppUrl").Value)
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
             app.UseHttpsRedirection();
             app.UseMvc();
         }
