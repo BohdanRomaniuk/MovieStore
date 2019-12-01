@@ -10,8 +10,8 @@ using MovieStore.DataAccess;
 namespace MovieStore.DataAccess.Migrations
 {
     [DbContext(typeof(MovieStoreContext))]
-    [Migration("20191124105027_UserRole")]
-    partial class UserRole
+    [Migration("20191201115953_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,6 +50,24 @@ namespace MovieStore.DataAccess.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Actors")
+                        .IsRequired();
+
+                    b.Property<string>("Companies")
+                        .IsRequired();
+
+                    b.Property<string>("Country")
+                        .IsRequired();
+
+                    b.Property<string>("Director")
+                        .IsRequired();
+
+                    b.Property<string>("Genre")
+                        .IsRequired();
+
+                    b.Property<string>("Length")
+                        .IsRequired();
 
                     b.Property<string>("OriginName")
                         .IsRequired();

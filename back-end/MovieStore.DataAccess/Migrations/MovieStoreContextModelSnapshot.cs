@@ -49,6 +49,24 @@ namespace MovieStore.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Actors")
+                        .IsRequired();
+
+                    b.Property<string>("Companies")
+                        .IsRequired();
+
+                    b.Property<string>("Country")
+                        .IsRequired();
+
+                    b.Property<string>("Director")
+                        .IsRequired();
+
+                    b.Property<string>("Genre")
+                        .IsRequired();
+
+                    b.Property<string>("Length")
+                        .IsRequired();
+
                     b.Property<string>("OriginName")
                         .IsRequired();
 

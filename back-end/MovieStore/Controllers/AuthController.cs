@@ -20,7 +20,7 @@ namespace MovieStore.API.Controllers
         }
 
         // Todo: it would be nice to have nicer routes here...
-        [HttpPost("/token")]
+        [HttpPost("token")]
         public IActionResult Token([FromBody] UserLoginDTO user)
         {
             if (!ModelState.IsValid)
@@ -53,7 +53,7 @@ namespace MovieStore.API.Controllers
         /// </summary>
         /// <param name="user">DTO with username, password, firstname and lastname</param>
         /// <returns>id of the user stored in database in header and token in body</returns>
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public IActionResult Register([FromBody] UserRegistrationDTO user)
         {
             if (!ModelState.IsValid)

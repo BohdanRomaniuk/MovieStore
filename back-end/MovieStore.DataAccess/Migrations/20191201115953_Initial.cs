@@ -18,7 +18,13 @@ namespace MovieStore.DataAccess.Migrations
                     OriginName = table.Column<string>(nullable: false),
                     Poster = table.Column<string>(nullable: false),
                     Year = table.Column<int>(nullable: false),
-                    Story = table.Column<string>(nullable: false)
+                    Genre = table.Column<string>(nullable: false),
+                    Country = table.Column<string>(nullable: false),
+                    Story = table.Column<string>(nullable: false),
+                    Length = table.Column<string>(nullable: false),
+                    Companies = table.Column<string>(nullable: false),
+                    Director = table.Column<string>(nullable: false),
+                    Actors = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,6 +37,7 @@ namespace MovieStore.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Role = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),

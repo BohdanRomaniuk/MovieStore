@@ -10,6 +10,25 @@ const Styles = styled.form`
 `;
 
 export class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loggined: false,
+            message: null,
+
+            UserName: '',
+            Password: '',
+        };
+    }
+
+    handleOnChangeUserName = (event) => {
+        this.setState({ UserName: event.target.value});
+    }
+
+    handleOnChangePassword = (event) => {
+        this.setState({ Password: event.target.value});
+    }
+
     render() {
         return (
             <Styles>

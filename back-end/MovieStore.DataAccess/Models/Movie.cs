@@ -46,5 +46,24 @@ namespace MovieStore.DataAccess
         public List<Comment> Comments { get; set; }
 
         public List<MovieRate> MovieRates { get; set; }
+
+        public Movie()
+        {
+        }
+
+        public Movie(string ukr, string org, string poster, int year, string genre, string country,
+            string length, string companies, string director, string actors)
+        {
+            UkrName = ukr;
+            OriginName = org;
+            Poster = poster;
+            Year = year;
+            Genre = genre;
+            Country = country;
+            Length = length;
+            Companies = companies;
+            Director = director;
+            Actors = actors;
+        }
     }
 }

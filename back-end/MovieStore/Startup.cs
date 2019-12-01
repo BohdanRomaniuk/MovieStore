@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,11 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MovieStore.AuthHelpers;
 using MovieStore.DataAccess;
+using MovieStore.Helpers;
 using MovieStore.Services;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -100,6 +103,7 @@ namespace MovieStore
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<MovieStoreContext>();
                 context.Database.Migrate();
+                DataInitializer.Initialize(context);
             }
 
             app.UseCors(builder => builder.WithOrigins(Configuration.GetSection("ReactAppUrl").Value)
@@ -112,10 +116,13 @@ namespace MovieStore
 
             // Swagger is here: localhost/swagger/index.html
             app.UseSwagger();
-            app.UseSwaggerUI(c => 
+            app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/MovieStore/swagger.json", "MovieStore API");
             });
+
+            // For the wwwroot folder
+            app.UseStaticFiles(); 
         }
     }
 }

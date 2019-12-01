@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import apiUrl from '../Constants';
+import {apiUrl, posterUrl} from '../Constants';
 
 export class Movie extends Component {
     constructor(props) {
@@ -42,7 +40,7 @@ export class Movie extends Component {
             <div class="row details-panel">
                 <div class="col-md-4">
                     <a rel="posters">
-                        <img itemprop="image" class="img-responsive" src={movieInfo.poster} alt={movieInfo.ukrName} style={{maxWidth: '23rem'}}/>
+                        <img itemprop="image" class="img-responsive" src={posterUrl + '/' + movieInfo.poster} alt={movieInfo.ukrName} style={{maxWidth: '23rem'}}/>
                     </a>
                 </div>
                 <div class="col-md-8 col-sm-6">
@@ -52,30 +50,30 @@ export class Movie extends Component {
                             <tr>
                                 <td>Жанр:</td>
                                 <td>
-                                    <a class="label label-primary" href="/?genres=genre.Genre.Id">genre.Genre.Name</a>
+                                    <a class="label label-primary">{movieInfo.genre}</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Країна:</td>
                                 <td>
-                                    <a class="label label-primary" href="/?country=country.Country.Id">country.Country.Name</a>
+                                    <a class="label label-primary">{movieInfo.country}</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Тривалість:</td>
-                                <td>Model.Length</td>
+                                <td>{movieInfo.length}</td>
                             </tr>
                             <tr>
                                 <td>Кінокомпанія</td>
-                                <td>Model.Companies</td>
+                                <td>{movieInfo.companies}</td>
                             </tr>
                             <tr>
                                 <td>Режисер:</td>
-                                <td>Model.Director</td>
+                                <td>{movieInfo.director}</td>
                             </tr>
                             <tr>
                                 <td>Актори:</td>
-                                <td>Model.Actors</td>
+                                <td>{movieInfo.actors}</td>
                             </tr>
                             <tr>
                                 <td>Сюжет:</td>
