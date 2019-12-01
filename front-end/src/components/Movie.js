@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Alert } from 'react-bootstrap'
 import {apiUrl, posterUrl} from '../Constants';
 
 export class Movie extends Component {
@@ -9,7 +10,9 @@ export class Movie extends Component {
             isLoaded: false,
             movieId: parseInt(props.match.params.movieId, 10) || 1,
             movieInfo: {},
-            comments: []
+            comments: [{ user: {}}],
+            commentText: '',
+            commentPosted: false,
         };
     }
 
@@ -18,6 +21,7 @@ export class Movie extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    console.log(result);
                     this.setState({
                         isLoaded: true,
                         movieInfo: result,
@@ -33,7 +37,60 @@ export class Movie extends Component {
             );
     }
 
+    handleOnChangeCommentText = (event) => {
+        this.setState({ commentText: event.target.value });
+    }
+
+    reloadComments = () => {
+        fetch(`${apiUrl}/comment/movieId=${this.state.movieId}`)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+                this.setState({
+                    isLoaded: true,
+                    comments: result
+                });
+            },
+            (error) => {
+                this.setState({
+                    isLoaded: true,
+                    error
+                });
+            }
+        );
+    }
+
+    handleOnSubmit = () => {
+        const url = `${apiUrl}/comment`;
+        let text = this.state.commentText;
+        let movieId = this.state.movieId;
+        let model = {CommentText: text, MovieId: movieId, UserId: 1, ChangeDate: new Date().timeNow};
+        console.log(model);
+        fetch(url, {
+            method: "POST",
+            body: JSON.stringify(model),
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                this.setState({commentPosted: false});
+            }
+            else
+            {
+                this.setState({commentPosted: true});
+                this.reloadComments();
+            }
+        });
+    }
+
     render() {
+        if(!this.state.comments)
+        {
+            return null;
+        }
         const { movieInfo, comments } = this.state;
         return (<div>
             <h4 class="altname">{movieInfo.ukrName} - {movieInfo.originName} ({movieInfo.year})</h4>
@@ -47,6 +104,12 @@ export class Movie extends Component {
                     <div></div>
                     <table class="table movie-detail">
                         <tbody>
+                            <tr>
+                                <td>Рейтинг:</td>
+                                <td>
+                                    <a class="label label-primary">0/10</a>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>Жанр:</td>
                                 <td>
@@ -86,26 +149,30 @@ export class Movie extends Component {
             </div>
             <h4 class="altname">Перегляд онлайн</h4>
             <h4 class="altname">Відгуки користувачів</h4>
+            {(comments.length==0) ? <Alert variant="primary">Коментарів ще немає, будьте першими</Alert> : '' }
             {comments.map(comment => (
             <div class="panel panel-default">
                 <div style={{ padding: '10px' }}>
-                    <a class="label label-primary" style={{ fontSize: '12px' }}>{comment.commentText}</a>
-            <span class="label label-default" style={{ fontSize: '12px' }}>{comment.commentDate}</span>
+                    <a class="label label-primary" style={{ fontSize: '12px' }}>{comment.user.firstName} {comment.user.lastName} {comment.changeDate}</a>
+                        <span class="label label-default" style={{ fontSize: '12px' }}>{comment.commentDate}</span>
                     <br />
                     <div style={{ padding: '5px' }}>{comment.commentText}</div>
                 </div>
             </div>))}
 
             <hr />
-            <h4>Відправити відгук:</h4>
-            <form method="post" asp-controller="Movie" asp-action="AddComment">
+            <h4>Залишити відгук:</h4>
+            <form method="post">
                 <div class="form-group">
-                    <label for="inputComment">Текст відгуку</label>
-                    <textarea name="commentText" class="form-control" id="inputComment" rows="5" required="required"></textarea>
+                    <textarea name="commentText" class="form-control" rows="5" onChange={this.handleOnChangeCommentText} required="required"></textarea>
                 </div>
-                <input type="hidden" name="movieId" value="Model.Id" />
-                <button type="submit" class="btn btn-success">Надіслати</button>
+                <Button variant="outline-success" style={{float: "right"}} onClick={this.handleOnSubmit}>
+                    Надіслати
+                </Button>
             </form>
+            <br></br>
+            <br></br>
+            <br></br>
         </div>
         );
     }

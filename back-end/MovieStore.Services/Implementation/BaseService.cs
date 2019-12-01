@@ -29,16 +29,19 @@ namespace MovieStore.Services
         public virtual void Add(TEntity entity)
         {
             Repository.Add(entity);
+            _unitOfWork.SaveChanges();
         }
 
         public virtual void Remove(TEntity entity)
         {
             Repository.Remove(entity);
+            _unitOfWork.SaveChanges();
         }
 
         public virtual void Update(TEntity entity)
         {
             Repository.Update(entity);
+            _unitOfWork.SaveChanges();
         }
 
         public virtual TEntity Get(int id)

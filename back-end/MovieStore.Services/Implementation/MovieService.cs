@@ -23,7 +23,7 @@ namespace MovieStore.Services
         public override Movie Get(int id)
         {
             return Repository.Get(m => m.Id == id)
-                .Include(c => c.Comments)
+                .Include(c => c.Comments).ThenInclude(m => m.User)
                 .Include(c => c.MovieRates)
                 .FirstOrDefault();
         }

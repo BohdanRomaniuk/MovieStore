@@ -52,13 +52,13 @@ export class Register extends Component {
         }).then(response => {
             if (!response.ok) {
                 this.setState({registered: false});
+                this.setState({ message: "Помилка реєстрації" }); 
             }
             else
             {
                 this.setState({registered: true});
                 setTimeout(()=>{this.props.history.push("/")}, 1000);
             }
-            this.setState({ message: "Помилка реєстрації" }); 
         });
     }
 
@@ -86,7 +86,7 @@ export class Register extends Component {
                         <Form.Label>Пароль</Form.Label>
                         <Form.Control type="password" onChange={this.handleOnChangePassword} placeholder="Пароль..." />
                     </Form.Group>
-                    <Button variant="outline-success" onClick={this.hangleOnSubmit}>
+                    <Button variant="outline-success" style={{float: "right"}} onClick={this.hangleOnSubmit}>
                         Зареєструватися
                     </Button>
                 </Form>

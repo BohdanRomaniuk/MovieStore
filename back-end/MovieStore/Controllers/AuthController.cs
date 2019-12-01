@@ -19,9 +19,8 @@ namespace MovieStore.API.Controllers
             _userService = userService;
         }
 
-        // Todo: it would be nice to have nicer routes here...
-        [HttpPost("token")]
-        public IActionResult Token([FromBody] UserLoginDTO user)
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] UserLoginDTO user)
         {
             if (!ModelState.IsValid)
             {

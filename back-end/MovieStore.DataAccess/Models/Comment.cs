@@ -11,7 +11,7 @@ namespace MovieStore.DataAccess
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty]
         public User User { get; set; }
         public int UserId { get; set; }
 
