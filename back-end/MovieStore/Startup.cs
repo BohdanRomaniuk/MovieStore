@@ -102,6 +102,10 @@ namespace MovieStore
                 context.Database.Migrate();
             }
 
+            app.UseCors(builder => builder.WithOrigins(Configuration.GetSection("ReactAppUrl").Value)
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
             app.UseHttpsRedirection();
             app.UseMvc();
             app.UseAuthentication();
