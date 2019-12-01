@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap'
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiUrl } from '../Constants';
 
@@ -25,19 +26,19 @@ export class Register extends Component {
     }
 
     handleOnChangeUserName = (event) => {
-        this.setState({ UserName: event.target.value});
+        this.setState({ UserName: event.target.value });
     }
 
     handleOnChangeFirstName = (event) => {
-        this.setState({ FirstName: event.target.value});
+        this.setState({ FirstName: event.target.value });
     }
 
     handleOnChangeLastName = (event) => {
-        this.setState({ LastName: event.target.value});
+        this.setState({ LastName: event.target.value });
     }
 
     handleOnChangePassword = (event) => {
-        this.setState({ Password: event.target.value});
+        this.setState({ Password: event.target.value });
     }
 
     hangleOnSubmit = () => {
@@ -51,13 +52,12 @@ export class Register extends Component {
             }
         }).then(response => {
             if (!response.ok) {
-                this.setState({registered: false});
-                this.setState({ message: "Помилка реєстрації" }); 
+                this.setState({ registered: false });
+                this.setState({ message: "Помилка реєстрації" });
             }
-            else
-            {
-                this.setState({registered: true});
-                setTimeout(()=>{this.props.history.push("/")}, 1000);
+            else {
+                this.setState({ registered: true });
+                setTimeout(() => { this.props.history.push("/") }, 1000);
             }
         });
     }
@@ -65,14 +65,14 @@ export class Register extends Component {
     render() {
         return (
             <Styles>
-                {(this.state.registered) ? 
-                    <Alert variant="success">Успішно зареєстровано</Alert> : 
+                {(this.state.registered) ?
+                    <Alert variant="success">Успішно зареєстровано</Alert> :
                     (this.state.message !== null) ? <Alert variant="danger">{this.state.message}</Alert> : ''
                 }
                 <Form>
                     <Form.Group controlId="userName">
                         <Form.Label>Ім'я користувача</Form.Label>
-                        <Form.Control type="username" onChange={this.handleOnChangeUserName} placeholder="Ім'я користувача..." required/>
+                        <Form.Control type="username" onChange={this.handleOnChangeUserName} placeholder="Ім'я користувача..." required />
                     </Form.Group>
                     <Form.Group controlId="firstName">
                         <Form.Label>Прізвище</Form.Label>
@@ -86,7 +86,7 @@ export class Register extends Component {
                         <Form.Label>Пароль</Form.Label>
                         <Form.Control type="password" onChange={this.handleOnChangePassword} placeholder="Пароль..." />
                     </Form.Group>
-                    <Button variant="outline-success" style={{float: "right"}} onClick={this.hangleOnSubmit}>
+                    <Button variant="outline-success" style={{ float: "right" }} onClick={this.hangleOnSubmit}>
                         Зареєструватися
                     </Button>
                 </Form>
@@ -94,3 +94,5 @@ export class Register extends Component {
         );
     }
 }
+
+export default withRouter(Register)

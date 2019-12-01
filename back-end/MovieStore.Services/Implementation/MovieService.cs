@@ -15,8 +15,6 @@ namespace MovieStore.Services
         public override IEnumerable<Movie> Get()
         {
             return Repository.Get()
-                .Include(c => c.Comments)
-                .Include(c => c.MovieRates)
                 .ToList();
         }
 
@@ -31,6 +29,13 @@ namespace MovieStore.Services
         public override void Remove(int id)
         {
             Repository.Remove(Get(id));
+        }
+
+        public IEnumerable<Movie> Search(string searchQuery)
+        {
+            return Repository.Get(m => m.UkrName.ToLower().Contains(searchQuery.ToLower())
+                                    || m.OriginName.ToLower().Contains(searchQuery.ToLower()))
+                .ToList();
         }
     }
 }

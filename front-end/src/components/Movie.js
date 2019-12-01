@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Alert } from 'react-bootstrap'
+import { Button, Alert } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import {apiUrl, posterUrl} from '../Constants';
 
 export class Movie extends Component {
@@ -21,7 +22,6 @@ export class Movie extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result);
                     this.setState({
                         isLoaded: true,
                         movieInfo: result,
@@ -46,7 +46,6 @@ export class Movie extends Component {
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result);
                 this.setState({
                     isLoaded: true,
                     comments: result
@@ -61,12 +60,11 @@ export class Movie extends Component {
         );
     }
 
-    handleOnSubmit = () => {
+    handleOnSubmitComment = () => {
         const url = `${apiUrl}/comment`;
         let text = this.state.commentText;
         let movieId = this.state.movieId;
-        let model = {CommentText: text, MovieId: movieId, UserId: 1, ChangeDate: new Date().timeNow};
-        console.log(model);
+        let model = {CommentText: text, MovieId: movieId, UserId: 1};
         fetch(url, {
             method: "POST",
             body: JSON.stringify(model),
@@ -87,10 +85,6 @@ export class Movie extends Component {
     }
 
     render() {
-        if(!this.state.comments)
-        {
-            return null;
-        }
         const { movieInfo, comments } = this.state;
         return (<div>
             <h4 class="altname">{movieInfo.ukrName} - {movieInfo.originName} ({movieInfo.year})</h4>
@@ -147,7 +141,11 @@ export class Movie extends Component {
                     <br />
                 </div>
             </div>
-            <h4 class="altname">Перегляд онлайн</h4>
+            <h4 class="altname">Перегляд онлайн
+                <Button variant="outline-success" style={{float: "right"}} onClick={this.handleOnSubmitMovie}>
+                    Купити фільм
+                </Button>
+            </h4>
             <h4 class="altname">Відгуки користувачів</h4>
             {(comments.length==0) ? <Alert variant="primary">Коментарів ще немає, будьте першими</Alert> : '' }
             {comments.map(comment => (
@@ -166,7 +164,7 @@ export class Movie extends Component {
                 <div class="form-group">
                     <textarea name="commentText" class="form-control" rows="5" onChange={this.handleOnChangeCommentText} required="required"></textarea>
                 </div>
-                <Button variant="outline-success" style={{float: "right"}} onClick={this.handleOnSubmit}>
+                <Button variant="outline-success" style={{float: "right"}} onClick={this.handleOnSubmitComment}>
                     Надіслати
                 </Button>
             </form>
@@ -178,4 +176,4 @@ export class Movie extends Component {
     }
 }
 
-export default Movie
+export default withRouter(Movie)

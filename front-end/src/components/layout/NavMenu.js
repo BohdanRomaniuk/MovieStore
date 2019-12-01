@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
 import styled from 'styled-components';
+import { withRouter } from 'react-router-dom'
 
 const Styles = styled.div`
   .navbar {
@@ -24,6 +25,21 @@ const Styles = styled.div`
 `;
 
 export class NavMenu extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchQuery: ''
+        };
+    }
+
+    handleOnChangeSearchQuery = (event) => {
+        this.setState({ searchQuery: event.target.value });
+    }
+
+    handleOnSubmit = () => {
+        this.props.history.push("/search/" + this.state.searchQuery);
+    }
+
     render() {
         return (
             <Styles>
@@ -51,8 +67,8 @@ export class NavMenu extends Component {
                             </Nav.Item>
                         </Nav>
                         <Form inline>
-                            <FormControl type="text" placeholder="Пошук..." className="mr-sm-2" />
-                            <Button variant="outline-success">Пошук</Button>
+                            <FormControl type="text" placeholder="Пошук..." onChange={this.handleOnChangeSearchQuery} className="mr-sm-2" />
+                            <Button variant="outline-success" onClick={this.handleOnSubmit}>Пошук</Button>
                         </Form>
                     </Navbar.Collapse>
                 </Navbar>
@@ -61,4 +77,4 @@ export class NavMenu extends Component {
     }
 }
 
-export default NavMenu
+export default withRouter(NavMenu)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import {apiUrl, posterUrl} from '../Constants';
+import { Link, withRouter } from 'react-router-dom'
+import { apiUrl, posterUrl } from '../Constants';
 
 export class Home extends Component {
     constructor(props) {
@@ -9,12 +9,16 @@ export class Home extends Component {
         this.state = {
             error: null,
             isLoaded: false,
-            movies: []
+            movies: [],
+            searchquery: props.match.params.query
         };
     }
 
     componentDidMount() {
-        fetch(`${apiUrl}/movie`)
+        var url = (typeof this.state.query === 'undefined') ? `${apiUrl}/movie` : `${apiUrl}/movie/searchQuery=${this.state.query}`;
+        console.log("URL");
+        console.log(url);
+        fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -34,13 +38,12 @@ export class Home extends Component {
 
     render() {
         const { movies } = this.state;
-        console.log(movies);
         return (
             <div style={{ margin: '10px auto' }}>
                 {movies.map(movie => (
                     <Card style={{ width: '16rem', float: 'left', marginRight: '10px', marginBottom: '10px' }}>
                         <Link to={"/movie/" + movie.id}>
-                            <Card.Img variant="top" src={posterUrl + '/' + movie.poster}/>
+                            <Card.Img variant="top" src={posterUrl + '/' + movie.poster} />
                         </Link>
                         <Card.Body>
                             <Card.Title><Link to={"/movie/" + movie.id}>{movie.ukrName} - {movie.originName} ({movie.year})</Link></Card.Title>
@@ -50,3 +53,5 @@ export class Home extends Component {
         );
     }
 }
+
+export default withRouter(Home)

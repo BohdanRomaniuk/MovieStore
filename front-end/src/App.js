@@ -8,22 +8,19 @@ import { Register } from './components/Register';
 import { Login } from './components/Login';
 import { Movie } from './components/Movie';
 
-function App() {
-  return (
-    <React.Fragment>
-        <BrowserRouter>
-          <NavMenu />
-          <Layout>
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/register" component={Register} />
-              <Route path="/login" component={Login} />
-              <Route path="/movie/:movieId" component={Movie} />
-            </Switch>
-          </Layout>
-        </BrowserRouter>
-      </React.Fragment>
-  );
-}
-
-export default App;
+export default (props) => (
+  <React.Fragment>
+    <BrowserRouter>
+      <NavMenu/>
+      <Layout>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/search/:query" component={Home} />
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+          <Route path="/movie/:movieId" component={Movie} />
+        </Switch>
+      </Layout>
+    </BrowserRouter>
+  </React.Fragment>
+);

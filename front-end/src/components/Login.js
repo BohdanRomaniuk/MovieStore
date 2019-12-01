@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap'
 import styled from 'styled-components';
 import { apiUrl } from '../Constants';
+import { withRouter } from 'react-router-dom';
 
 const Styles = styled.form`
   form {
@@ -41,13 +42,12 @@ export class Login extends Component {
             }
         }).then(response => {
             if (!response.ok) {
-                this.setState({loggined: false});
-                this.setState({ message: "Помилка входу. Перевірте ім'я користувача та пароль!" }); 
+                this.setState({ loggined: false });
+                this.setState({ message: "Помилка входу. Перевірте ім'я користувача та пароль!" });
             }
-            else
-            {
-                this.setState({loggined: true});
-                setTimeout(()=>{this.props.history.push("/")}, 1000);
+            else {
+                this.setState({ loggined: true });
+                setTimeout(() => { this.props.history.push("/") }, 1000);
             }
         });
     }
@@ -68,7 +68,7 @@ export class Login extends Component {
                         <Form.Label>Пароль</Form.Label>
                         <Form.Control type="password" onChange={this.handleOnChangePassword} placeholder="Пароль..." />
                     </Form.Group>
-                    <Button variant="outline-primary" style={{float: "right"}} onClick={this.handleOnSubmit}>
+                    <Button variant="outline-primary" style={{ float: "right" }} onClick={this.handleOnSubmit}>
                         Увійти
                 </Button>
                 </Form>
@@ -76,3 +76,5 @@ export class Login extends Component {
         );
     }
 }
+
+export default withRouter(Login)
