@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MovieStore.DataAccess\MovieStore.DataAccess.csproj" />
-    <ProjectReference Include="..\MovieStore.DTO\MovieStore.DataTransfer.csproj" />
   </ItemGroup>
 
 </Project>

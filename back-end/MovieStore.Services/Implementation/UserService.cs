@@ -1,4 +1,5 @@
-﻿using MovieStore.DataAccess;
+﻿using AutoMapper;
+using MovieStore.DataAccess;
 using MovieStore.DataTransfer.Objects;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace MovieStore.Services
         public UserIdentityDTO CreateUser(UserRegistrationDTO user)
         {
             if (Repository.Get(u => u.UserName == user.UserName).Any())
+            {
                 return null;
+            }
 
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
@@ -31,17 +34,14 @@ namespace MovieStore.Services
             _unitOfWork.SaveChanges();
 
             User savedUser = Repository.Get(u => u.UserName == user.UserName).FirstOrDefault();
+            if (savedUser == null)
+            {
+                return null;
+            }
 
-            return savedUser != null 
-                ?  new UserIdentityDTO 
-                {
-                    Id = savedUser.Id,
-                    UserName = savedUser.UserName,
-                    Role = savedUser.Role,
-                    FirstName = savedUser.FirstName,
-                    LastName = savedUser.LastName
-                }
-                : null;
+            UserIdentityDTO identityDTO = new UserIdentityDTO();
+            GetUserToUserIdentityDTOMapper().Map(savedUser, identityDTO);
+            return identityDTO;
         }
 
         public override IEnumerable<User> Get()
@@ -60,16 +60,14 @@ namespace MovieStore.Services
         {
             User user = Repository.Get(u => u.UserName == username)
                 .FirstOrDefault();
-            return user != null 
-                ? new UserIdentityDTO() 
-                {
-                    Id = user.Id,
-                    Role = user.Role,
-                    UserName = user.UserName,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName
-                } 
-                : null;
+            if (user == null)
+            {
+                return null;
+            }
+
+            UserIdentityDTO identityDTO = new UserIdentityDTO();
+            GetUserToUserIdentityDTOMapper().Map(user, identityDTO);
+            return identityDTO;
         }
 
         public override void Remove(int id)
@@ -81,9 +79,17 @@ namespace MovieStore.Services
         {
             User dbUser = Repository.Get(u => u.UserName == user.Username).FirstOrDefault();
             if (dbUser == null)
+            {
                 return false;
+            }
 
             return BCrypt.Net.BCrypt.Verify(user.Password, dbUser.HashedPassword);
+        }
+
+        private IMapper GetUserToUserIdentityDTOMapper()
+        {
+            return new MapperConfiguration(cfg => cfg.CreateMap<User, UserIdentityDTO>())
+                .CreateMapper();
         }
     }
 }

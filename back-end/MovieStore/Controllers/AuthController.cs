@@ -24,15 +24,21 @@ namespace MovieStore.API.Controllers
         public IActionResult Token([FromBody] UserLoginDTO user)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             if (!_userService.ValidateUserPassword(user))
+            {
                 return Unauthorized();
+            }
 
             var identityDTO = _userService.GetUserIdentity(user.Username);
 
             if (identityDTO == null)
+            {
                 return BadRequest("Cannot get identity for this user.");
+            }
 
             var identity = GetClaimsIdentity(identityDTO);
 
@@ -51,15 +57,21 @@ namespace MovieStore.API.Controllers
         public IActionResult Register([FromBody] UserRegistrationDTO user)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            if(_userService.Get(u => u.UserName == user.UserName).Any())
+            if (_userService.Get(u => u.UserName == user.UserName).Any())
+            {
                 return BadRequest("User already exists.");
+            }
 
             var registeredUser = _userService.CreateUser(user);
-            
+
             if (registeredUser == null)
+            {
                 return BadRequest("User registration failure.");
+            }
 
             var identity = GetClaimsIdentity(registeredUser);
 
