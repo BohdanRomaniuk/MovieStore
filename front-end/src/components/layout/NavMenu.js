@@ -28,8 +28,19 @@ export class NavMenu extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchQuery: ''
+            searchQuery: '',
+            loggedIn: false,
+            userName: '',
+            userId: 0
         };
+    }
+
+    componentDidMount() {
+        this.setState({ loggedIn: this.props.loggedIn, userName: this.props.userName, userId: this.props.userId });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ loggedIn: nextProps.loggedIn, userName: nextProps.userName, userId: nextProps.userId });
     }
 
     handleOnChangeSearchQuery = (event) => {
@@ -56,14 +67,26 @@ export class NavMenu extends Component {
                         </Nav>
                         <Nav className="ml-auto">
                             <Nav.Item>
-                                <Nav.Link>
-                                    <Link to="/register">Зареєструватися</Link>
-                                </Nav.Link>
+                                {(this.state.loggedIn) ?
+                                    <Nav.Link>
+                                        <Link to={"/profile/" + this.state.userId}>Романюк Богдан</Link>
+                                    </Nav.Link>
+                                    :
+                                    <Nav.Link>
+                                        <Link to="/register">Зареєструватися</Link>
+                                    </Nav.Link>
+                                }
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link>
-                                    <Link to="/login">Увійти</Link>
-                                </Nav.Link>
+                                {(this.state.loggedIn) ?
+                                    <Nav.Link>
+                                        <Link to="/logout">Вийти</Link>
+                                    </Nav.Link>
+                                    :
+                                    <Nav.Link>
+                                        <Link to="/login">Увійти</Link>
+                                    </Nav.Link>
+                                }
                             </Nav.Item>
                         </Nav>
                         <Form inline>

@@ -21,6 +21,7 @@ export class Login extends Component {
             UserName: '',
             Password: '',
         };
+        console.log(props);
     }
 
     handleOnChangeUserName = (event) => {
@@ -32,6 +33,7 @@ export class Login extends Component {
     }
 
     handleOnSubmit = () => {
+        
         const url = `${apiUrl}/auth/login`;
         fetch(url, {
             method: "POST",
@@ -43,10 +45,12 @@ export class Login extends Component {
         }).then(response => {
             if (!response.ok) {
                 this.setState({ loggined: false });
+                this.props.onChangeLogin(false);
                 this.setState({ message: "Помилка входу. Перевірте ім'я користувача та пароль!" });
             }
             else {
                 this.setState({ loggined: true });
+                this.props.onChangeLogin(true);
                 setTimeout(() => { this.props.history.push("/") }, 1000);
             }
         });
