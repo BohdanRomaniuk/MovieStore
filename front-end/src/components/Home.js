@@ -15,8 +15,15 @@ export class Home extends Component {
     }
 
     componentDidMount() {
-        var url = (typeof this.state.query === 'undefined') ? `${apiUrl}/movie` : `${apiUrl}/movie/searchQuery=${this.state.query}`;
-        console.log("URL");
+        this.reloadMovies(this.state.searchquery);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.reloadMovies(nextProps.match.params.query);
+    }
+
+    reloadMovies = (query) => {
+        var url = (typeof query === "undefined") ? `${apiUrl}/movie` : `${apiUrl}/movie/searchQuery=${query}`;
         console.log(url);
         fetch(url)
             .then(res => res.json())
@@ -33,7 +40,7 @@ export class Home extends Component {
                         error
                     });
                 }
-            )
+        );
     }
 
     render() {
