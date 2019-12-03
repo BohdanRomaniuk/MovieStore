@@ -18,7 +18,14 @@ namespace MovieStore.DataAccess.Migrations
                     OriginName = table.Column<string>(nullable: false),
                     Poster = table.Column<string>(nullable: false),
                     Year = table.Column<int>(nullable: false),
-                    Story = table.Column<string>(nullable: false)
+                    Genre = table.Column<string>(nullable: false),
+                    Country = table.Column<string>(nullable: false),
+                    Story = table.Column<string>(nullable: false),
+                    Length = table.Column<string>(nullable: false),
+                    Companies = table.Column<string>(nullable: false),
+                    Director = table.Column<string>(nullable: false),
+                    Actors = table.Column<string>(nullable: false),
+                    Price = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,6 +38,7 @@ namespace MovieStore.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Role = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
@@ -63,6 +71,32 @@ namespace MovieStore.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(nullable: false),
+                    MovieId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MovieOrders_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieOrders_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -107,6 +141,16 @@ namespace MovieStore.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MovieOrders_MovieId",
+                table: "MovieOrders",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MovieOrders_UserId",
+                table: "MovieOrders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MovieRates_MovieId",
                 table: "MovieRates",
                 column: "MovieId");
@@ -121,6 +165,9 @@ namespace MovieStore.DataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "MovieOrders");
 
             migrationBuilder.DropTable(
                 name: "MovieRates");

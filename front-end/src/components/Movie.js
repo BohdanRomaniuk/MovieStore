@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import apiUrl from '../Constants';
+import { Button, Alert } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
+import {apiUrl, posterUrl} from '../Constants';
 
 export class Movie extends Component {
     constructor(props) {
@@ -11,7 +11,9 @@ export class Movie extends Component {
             isLoaded: false,
             movieId: parseInt(props.match.params.movieId, 10) || 1,
             movieInfo: {},
-            comments: []
+            comments: [{ user: {}}],
+            commentText: '',
+            commentPosted: false,
         };
     }
 
@@ -35,6 +37,53 @@ export class Movie extends Component {
             );
     }
 
+    handleOnChangeCommentText = (event) => {
+        this.setState({ commentText: event.target.value });
+    }
+
+    reloadComments = () => {
+        fetch(`${apiUrl}/comment/movieId=${this.state.movieId}`)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({
+                    isLoaded: true,
+                    comments: result
+                });
+            },
+            (error) => {
+                this.setState({
+                    isLoaded: true,
+                    error
+                });
+            }
+        );
+    }
+
+    handleOnSubmitComment = () => {
+        const url = `${apiUrl}/comment`;
+        let text = this.state.commentText;
+        let movieId = this.state.movieId;
+        let model = {CommentText: text, MovieId: movieId, UserId: 1};
+        fetch(url, {
+            method: "POST",
+            body: JSON.stringify(model),
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                this.setState({commentPosted: false});
+            }
+            else
+            {
+                this.setState({commentPosted: true});
+                this.reloadComments();
+            }
+        });
+    }
+
     render() {
         const { movieInfo, comments } = this.state;
         return (<div>
@@ -42,7 +91,7 @@ export class Movie extends Component {
             <div class="row details-panel">
                 <div class="col-md-4">
                     <a rel="posters">
-                        <img itemprop="image" class="img-responsive" src={movieInfo.poster} alt={movieInfo.ukrName} style={{maxWidth: '23rem'}}/>
+                        <img itemprop="image" class="img-responsive" src={posterUrl + '/' + movieInfo.poster} alt={movieInfo.ukrName} style={{maxWidth: '23rem'}}/>
                     </a>
                 </div>
                 <div class="col-md-8 col-sm-6">
@@ -50,32 +99,38 @@ export class Movie extends Component {
                     <table class="table movie-detail">
                         <tbody>
                             <tr>
+                                <td>Рейтинг:</td>
+                                <td>
+                                    <a class="label label-primary">0/10</a>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Жанр:</td>
                                 <td>
-                                    <a class="label label-primary" href="/?genres=genre.Genre.Id">genre.Genre.Name</a>
+                                    <a class="label label-primary">{movieInfo.genre}</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Країна:</td>
                                 <td>
-                                    <a class="label label-primary" href="/?country=country.Country.Id">country.Country.Name</a>
+                                    <a class="label label-primary">{movieInfo.country}</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Тривалість:</td>
-                                <td>Model.Length</td>
+                                <td>{movieInfo.length}</td>
                             </tr>
                             <tr>
                                 <td>Кінокомпанія</td>
-                                <td>Model.Companies</td>
+                                <td>{movieInfo.companies}</td>
                             </tr>
                             <tr>
                                 <td>Режисер:</td>
-                                <td>Model.Director</td>
+                                <td>{movieInfo.director}</td>
                             </tr>
                             <tr>
                                 <td>Актори:</td>
-                                <td>Model.Actors</td>
+                                <td>{movieInfo.actors}</td>
                             </tr>
                             <tr>
                                 <td>Сюжет:</td>
@@ -86,31 +141,39 @@ export class Movie extends Component {
                     <br />
                 </div>
             </div>
-            <h4 class="altname">Перегляд онлайн</h4>
+            <h4 class="altname">Перегляд онлайн
+                <Button variant="outline-success" style={{float: "right"}} onClick={this.handleOnSubmitMovie}>
+                    Купити фільм
+                </Button>
+            </h4>
             <h4 class="altname">Відгуки користувачів</h4>
+            {(comments.length==0) ? <Alert variant="primary">Коментарів ще немає, будьте першими</Alert> : '' }
             {comments.map(comment => (
             <div class="panel panel-default">
                 <div style={{ padding: '10px' }}>
-                    <a class="label label-primary" style={{ fontSize: '12px' }}>{comment.commentText}</a>
-            <span class="label label-default" style={{ fontSize: '12px' }}>{comment.commentDate}</span>
+                    <a class="label label-primary" style={{ fontSize: '12px' }}>{comment.user.firstName} {comment.user.lastName} {comment.changeDate}</a>
+                        <span class="label label-default" style={{ fontSize: '12px' }}>{comment.commentDate}</span>
                     <br />
                     <div style={{ padding: '5px' }}>{comment.commentText}</div>
                 </div>
             </div>))}
 
             <hr />
-            <h4>Відправити відгук:</h4>
-            <form method="post" asp-controller="Movie" asp-action="AddComment">
+            <h4>Залишити відгук:</h4>
+            <form method="post">
                 <div class="form-group">
-                    <label for="inputComment">Текст відгуку</label>
-                    <textarea name="commentText" class="form-control" id="inputComment" rows="5" required="required"></textarea>
+                    <textarea name="commentText" class="form-control" rows="5" onChange={this.handleOnChangeCommentText} required="required"></textarea>
                 </div>
-                <input type="hidden" name="movieId" value="Model.Id" />
-                <button type="submit" class="btn btn-success">Надіслати</button>
+                <Button variant="outline-success" style={{float: "right"}} onClick={this.handleOnSubmitComment}>
+                    Надіслати
+                </Button>
             </form>
+            <br></br>
+            <br></br>
+            <br></br>
         </div>
         );
     }
 }
 
-export default Movie
+export default withRouter(Movie)

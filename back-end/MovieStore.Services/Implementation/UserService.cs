@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using MovieStore.DataAccess;
 using MovieStore.DataTransfer.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace MovieStore.Services
 {
@@ -20,7 +23,7 @@ namespace MovieStore.Services
                 return null;
             }
 
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            string passwordHash = CalculateMD5Hash(user.Password);
 
             Repository.Add(new User
             {
@@ -83,13 +86,27 @@ namespace MovieStore.Services
                 return false;
             }
 
-            return BCrypt.Net.BCrypt.Verify(user.Password, dbUser.HashedPassword);
+            return CalculateMD5Hash(user.Password).Equals(dbUser.HashedPassword, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private IMapper GetUserToUserIdentityDTOMapper()
         {
             return new MapperConfiguration(cfg => cfg.CreateMap<User, UserIdentityDTO>())
                 .CreateMapper();
+        }
+
+        private string CalculateMD5Hash(string input)
+        {
+            MD5 md5 = MD5.Create();
+            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+            return sb.ToString();
         }
     }
 }

@@ -12,5 +12,12 @@ namespace MovieStore.Controllers
             : base(service)
         {
         }
+
+        [HttpGet("searchQuery={searchQuery}")]
+        public IActionResult Search(string searchQuery)
+        {
+            var value = (_service as IMovieService).Search(searchQuery);
+            return Ok(value);
+        }
     }
 }
