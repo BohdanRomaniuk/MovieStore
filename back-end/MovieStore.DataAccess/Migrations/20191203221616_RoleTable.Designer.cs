@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieStore.DataAccess;
 
 namespace MovieStore.DataAccess.Migrations
 {
     [DbContext(typeof(MovieStoreContext))]
-    partial class MovieStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20191203221616_RoleTable")]
+    partial class RoleTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

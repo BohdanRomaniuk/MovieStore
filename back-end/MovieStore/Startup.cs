@@ -42,6 +42,7 @@ namespace MovieStore
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
             //Services (BL)
 
             // Configure JWT authentication

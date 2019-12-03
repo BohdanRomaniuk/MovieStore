@@ -20,12 +20,17 @@ namespace MovieStore.Helpers
                 return;
             }
 
+            var userRole = new Role { Name = "user" };
+            var moderatorRole = new Role { Name = "moderator" };
+            var adminRole = new Role { Name = "admin" };
+            context.Roles.AddRange(new[] { userRole, moderatorRole, adminRole });
+
             context.Users.Add(new User()
             {
                 UserName = "bohdan",
                 FirstName = "Богдан",
                 LastName = "Романюк",
-                Role = "admin",
+                Role = adminRole,
                 HashedPassword = "037a6a1c0c23a9b9452f79c86245af9f"
             });
 
@@ -34,7 +39,7 @@ namespace MovieStore.Helpers
                 UserName = "roman",
                 FirstName = "Роман",
                 LastName = "Паробій",
-                Role = "moderator",
+                Role = moderatorRole,
                 HashedPassword = "b179a9ec0777eae19382c14319872e1b"
             });
 
@@ -43,7 +48,7 @@ namespace MovieStore.Helpers
                 UserName = "vladislav",
                 FirstName = "Влад",
                 LastName = "Бучелла",
-                Role = "user",
+                Role = userRole,
                 HashedPassword = "f68438be30a21e34d7d5dc9a71dec40a"
             });
         }

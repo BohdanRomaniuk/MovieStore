@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MovieStore.DataAccess;
 using MovieStore.DataTransfer.Objects;
 using System;
@@ -11,9 +12,12 @@ namespace MovieStore.Services
 {
     public class UserService : BaseService<User>, IUserService
     {
-        public UserService(IUnitOfWork unitOfWork)
+        private IRoleService _roleService;
+
+        public UserService(IUnitOfWork unitOfWork, IRoleService roleService)
             : base(unitOfWork)
         {
+            _roleService = roleService;
         }
 
         public UserIdentityDTO CreateUser(UserRegistrationDTO user)
@@ -25,18 +29,28 @@ namespace MovieStore.Services
 
             string passwordHash = CalculateMD5Hash(user.Password);
 
+            // TODO: move string to constant
+            var roles = _roleService.Get(r => r.Name == "user");
+
+            if (!roles.Any())
+            {
+                _roleService.Add(new Role { Name = "user" });
+                roles = _roleService.Get(r => r.Name == "user");
+            }
+
             Repository.Add(new User
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Role = "user",
+                Role = roles.First(),
                 UserName = user.UserName,
                 HashedPassword = passwordHash
             });
-
             _unitOfWork.SaveChanges();
 
-            User savedUser = Repository.Get(u => u.UserName == user.UserName).FirstOrDefault();
+            User savedUser = Repository.Get(u => u.UserName == user.UserName)
+                .Include(u => u.Role)
+                .FirstOrDefault();
             if (savedUser == null)
             {
                 return null;
@@ -62,6 +76,7 @@ namespace MovieStore.Services
         public UserIdentityDTO GetUserIdentity(string username)
         {
             User user = Repository.Get(u => u.UserName == username)
+                .Include(u => u.Role)
                 .FirstOrDefault();
             if (user == null)
             {
@@ -91,7 +106,9 @@ namespace MovieStore.Services
 
         private IMapper GetUserToUserIdentityDTOMapper()
         {
-            return new MapperConfiguration(cfg => cfg.CreateMap<User, UserIdentityDTO>())
+            return new MapperConfiguration(cfg => cfg.CreateMap<User, UserIdentityDTO>()
+                .ForMember(destination => destination.Role,
+                    opts => opts.MapFrom(source => source.Role.Name)))
                 .CreateMapper();
         }
 
