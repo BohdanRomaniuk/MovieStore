@@ -50,13 +50,14 @@ namespace MovieStore.Helpers
 
         private static void CreateMoviesIfNotExists(MovieStoreContext context)
         {
-            if(context.Movies.Count()!=0)
+            if (context.Movies.Count() != 0)
             {
                 return;
             }
 
             context.Movies.Add(new Movie()
             {
+                Price = 243,
                 UkrName = "Месники: Завершення",
                 OriginName = "Avengers: Endgame",
                 Poster = "avengers-endgame-2019-_550.jpg",
@@ -64,7 +65,7 @@ namespace MovieStore.Helpers
                 Genre = "бойовик, пригоди, фантастика, фентезі",
                 Country = "США",
                 Length = "03:01:11",
-                Companies = "Brazil Production Services, Double Negative (DNEG), Marvel Studios", 
+                Companies = "Brazil Production Services, Double Negative (DNEG), Marvel Studios",
                 Director = "Ентоні Руссо, Джо Руссо",
                 Actors = "Роберт Дауні мол., Кріс Еванс, Марк Руффало, Кріс Гемсворт, Скарлетт Йоханссон, Джеремі Реннер, Дон Чідл, Пол Радд, Чедвік Боузман, Брі Ларсон",
                 Story = "Месники і Вартові Галактики вступають в останню стадію війни з Таносом, який володіє всемогутньою Рукавичкою Нескінченності. Гряде фінальна битва між силами героїв і Божевільного Титана, що раз і назавжди визначить подальшу долю не тільки Землі, але і всього всесвіту.",
@@ -72,6 +73,7 @@ namespace MovieStore.Helpers
 
             context.Movies.Add(new Movie()
             {
+                Price = 110,
                 UkrName = "Гра в хованки",
                 OriginName = "Ready or Not",
                 Poster = "1911201523595606_f0_0.jpg",
@@ -87,6 +89,7 @@ namespace MovieStore.Helpers
 
             context.Movies.Add(new Movie()
             {
+                Price = 75,
                 UkrName = "Воно 2",
                 OriginName = "It Chapter Two",
                 Poster = "it-chapter-two-2019-_1570353356_550.jpg",
@@ -102,6 +105,7 @@ namespace MovieStore.Helpers
 
             context.Movies.Add(new Movie()
             {
+                Price = 340,
                 UkrName = "Одного разу в... Голлівуді",
                 OriginName = "Once Upon a Time ... in Hollywood",
                 Poster = "once-upon-a-time...-in-hollywood-2019-_1574283373_550.jpg",
@@ -117,6 +121,7 @@ namespace MovieStore.Helpers
 
             context.Movies.Add(new Movie()
             {
+                Price = 170,
                 UkrName = "Джокер",
                 OriginName = "Joker",
                 Poster = "joker-2019-_1573464752_550.jpg",
@@ -132,6 +137,7 @@ namespace MovieStore.Helpers
 
             context.Movies.Add(new Movie()
             {
+                Price = 56,
                 UkrName = "Форсаж: Гоббс та Шоу",
                 OriginName = "Fast & Furious Presents: Hobbs & Shaw",
                 Poster = "hobbs-shaw-1_550.jpg",

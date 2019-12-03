@@ -43,6 +43,9 @@ namespace MovieStore.DataAccess
         [Required]
         public string Actors { get; set; }
 
+        [Required]
+        public double Price { get; set; }
+
         public List<Comment> Comments { get; set; }
 
         public List<MovieRate> MovieRates { get; set; }

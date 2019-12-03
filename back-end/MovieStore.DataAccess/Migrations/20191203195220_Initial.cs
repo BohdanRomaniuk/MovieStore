@@ -24,7 +24,8 @@ namespace MovieStore.DataAccess.Migrations
                     Length = table.Column<string>(nullable: false),
                     Companies = table.Column<string>(nullable: false),
                     Director = table.Column<string>(nullable: false),
-                    Actors = table.Column<string>(nullable: false)
+                    Actors = table.Column<string>(nullable: false),
+                    Price = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,6 +78,32 @@ namespace MovieStore.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MovieOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(nullable: false),
+                    MovieId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MovieOrders_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieOrders_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MovieRates",
                 columns: table => new
                 {
@@ -114,6 +141,16 @@ namespace MovieStore.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MovieOrders_MovieId",
+                table: "MovieOrders",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MovieOrders_UserId",
+                table: "MovieOrders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MovieRates_MovieId",
                 table: "MovieRates",
                 column: "MovieId");
@@ -128,6 +165,9 @@ namespace MovieStore.DataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "MovieOrders");
 
             migrationBuilder.DropTable(
                 name: "MovieRates");

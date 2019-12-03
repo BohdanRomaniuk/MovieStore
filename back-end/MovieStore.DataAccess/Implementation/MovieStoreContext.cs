@@ -7,6 +7,7 @@ namespace MovieStore.DataAccess
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<MovieRate> MovieRates { get; set; }
+        public DbSet<MovieOrder> MovieOrders { get; set; }
         public DbSet<User> Users { get; set; }
 
         public MovieStoreContext(DbContextOptions<MovieStoreContext> options) :

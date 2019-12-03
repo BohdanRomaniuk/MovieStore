@@ -10,7 +10,7 @@ using MovieStore.DataAccess;
 namespace MovieStore.DataAccess.Migrations
 {
     [DbContext(typeof(MovieStoreContext))]
-    [Migration("20191201115953_Initial")]
+    [Migration("20191203195220_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,8 @@ namespace MovieStore.DataAccess.Migrations
                     b.Property<string>("Poster")
                         .IsRequired();
 
+                    b.Property<double>("Price");
+
                     b.Property<string>("Story")
                         .IsRequired();
 
@@ -86,6 +88,25 @@ namespace MovieStore.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("MovieId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MovieOrders");
                 });
 
             modelBuilder.Entity("MovieStore.DataAccess.MovieRate", b =>
@@ -139,6 +160,19 @@ namespace MovieStore.DataAccess.Migrations
                 {
                     b.HasOne("MovieStore.DataAccess.Movie", "Movie")
                         .WithMany("Comments")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MovieStore.DataAccess.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieOrder", b =>
+                {
+                    b.HasOne("MovieStore.DataAccess.Movie", "Movie")
+                        .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade);
 
