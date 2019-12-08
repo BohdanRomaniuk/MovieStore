@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Button, Alert, Card, Badge } from 'react-bootstrap';
 import { withRouter, Link } from 'react-router-dom';
 import { apiUrl, posterUrl } from '../Constants';
 import { Player } from 'video-react';
@@ -148,7 +148,7 @@ export class Movie extends Component {
                             <tr>
                                 <td>Ціна:</td>
                                 <td>
-                                    <Button variant="success" size="sm" disabled style={{  marginRight: '10px' }}>
+                                    <Button variant="success" size="sm" disabled style={{ marginRight: '10px' }}>
                                         {movieInfo.price} грн.
                                     </Button>
                                     {(this.props.userId === 0) ? ''
@@ -231,14 +231,12 @@ export class Movie extends Component {
             <h4 class="altname">Відгуки користувачів</h4>
             {(comments.length == 0) ? <Alert variant="primary">Коментарів ще немає, будьте першими</Alert> : ''}
             {comments.map(comment => (
-                <div class="panel panel-default">
-                    <div style={{ padding: '10px' }}>
-                        <a class="label label-primary" style={{ fontSize: '12px' }}>{comment.user.firstName} {comment.user.lastName} {comment.changeDate}</a>
-                        <span class="label label-default" style={{ fontSize: '12px' }}>{comment.commentDate}</span>
-                        <br />
-                        <div style={{ padding: '5px' }}>{comment.commentText}</div>
-                    </div>
-                </div>))}
+                <div><Badge variant="info" style={{marginRight: '5px'}}>{comment.user.firstName} {comment.user.lastName}</Badge> 
+                <Badge variant="info">{comment.changeDate}</Badge>
+                <Card>
+                    <Card.Body>{comment.commentText}</Card.Body>
+                </Card></div>
+            ))}
             <hr />
             <h4>Залишити відгук:</h4>
             {(this.props.userId !== 0) ?
