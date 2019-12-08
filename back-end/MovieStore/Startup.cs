@@ -40,6 +40,7 @@ namespace MovieStore
 
             //Services (BL)
             services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IMovieOrderService, MovieOrderService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IUserService, UserService>();
             //Services (BL)

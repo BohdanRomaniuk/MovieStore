@@ -15,7 +15,7 @@ namespace MovieStore.DataAccess
         [Required]
         public int UserId { get; set; }
 
-        [JsonIgnore]
+        
         public Movie Movie { get; set; }
         [Required]
         public int MovieId { get; set; }
