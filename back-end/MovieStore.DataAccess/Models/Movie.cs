@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,11 +23,13 @@ namespace MovieStore.DataAccess
         [Required]
         public int Year { get; set; }
 
-        [Required]
-        public string Genre { get; set; }
+        [JsonIgnore]
+        public List<MovieGenre> Genres { get; set; }
+        //public int GenreId { get; set; }
 
-        [Required]
-        public string Country { get; set; }
+        [JsonIgnore]
+        public List<MovieCountry> Countries { get; set; }
+        //public int CountryId { get; set; }
 
         [Required]
         public string Story { get; set; }
@@ -34,14 +37,12 @@ namespace MovieStore.DataAccess
         [Required]
         public string Length { get; set; }
 
-        [Required]
-        public string Companies { get; set; }
+        public List<MovieCompany> Companies { get; set; }
 
-        [Required]
-        public string Director { get; set; }
+        public Person Director { get; set; }
+        public int DirectorId { get; set; }
 
-        [Required]
-        public string Actors { get; set; }
+        public List<MovieActor> Actors { get; set; }
 
         [Required]
         public double Price { get; set; }
@@ -54,19 +55,19 @@ namespace MovieStore.DataAccess
         {
         }
 
-        public Movie(string ukr, string org, string poster, int year, string genre, string country,
+        public Movie(string ukr, string org, string poster, int year, List<Genre> genres, List<Country> countries,
             string length, string companies, string director, string actors)
         {
             UkrName = ukr;
             OriginName = org;
             Poster = poster;
             Year = year;
-            Genre = genre;
-            Country = country;
+            //MovieGenres = genres;
+            //Countries = countries;
             Length = length;
-            Companies = companies;
-            Director = director;
-            Actors = actors;
+            //Companies = companies;
+            //Director = director;
+            //Actors = actors;
         }
     }
 }

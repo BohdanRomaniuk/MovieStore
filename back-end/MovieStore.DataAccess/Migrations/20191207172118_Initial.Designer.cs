@@ -10,8 +10,8 @@ using MovieStore.DataAccess;
 namespace MovieStore.DataAccess.Migrations
 {
     [DbContext(typeof(MovieStoreContext))]
-    [Migration("20191203221616_RoleTable")]
-    partial class RoleTable
+    [Migration("20191207172118_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,26 +45,55 @@ namespace MovieStore.DataAccess.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("MovieStore.DataAccess.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genres");
+                });
+
             modelBuilder.Entity("MovieStore.DataAccess.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Actors")
-                        .IsRequired();
-
-                    b.Property<string>("Companies")
-                        .IsRequired();
-
-                    b.Property<string>("Country")
-                        .IsRequired();
-
-                    b.Property<string>("Director")
-                        .IsRequired();
-
-                    b.Property<string>("Genre")
-                        .IsRequired();
+                    b.Property<int>("DirectorId");
 
                     b.Property<string>("Length")
                         .IsRequired();
@@ -87,7 +116,61 @@ namespace MovieStore.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DirectorId");
+
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieActor", b =>
+                {
+                    b.Property<int>("MovieId");
+
+                    b.Property<int>("PersonId");
+
+                    b.HasKey("MovieId", "PersonId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("MovieActor");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieCompany", b =>
+                {
+                    b.Property<int>("MovieId");
+
+                    b.Property<int>("CompanyId");
+
+                    b.HasKey("MovieId", "CompanyId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("MovieCompany");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieCountry", b =>
+                {
+                    b.Property<int>("MovieId");
+
+                    b.Property<int>("CountryId");
+
+                    b.HasKey("MovieId", "CountryId");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("MovieCountry");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieGenre", b =>
+                {
+                    b.Property<int>("MovieId");
+
+                    b.Property<int>("GenreId");
+
+                    b.HasKey("MovieId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("MovieGenre");
                 });
 
             modelBuilder.Entity("MovieStore.DataAccess.MovieOrder", b =>
@@ -128,6 +211,27 @@ namespace MovieStore.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("MovieRates");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.Person", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CountryId");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Person");
                 });
 
             modelBuilder.Entity("MovieStore.DataAccess.Role", b =>
@@ -184,6 +288,65 @@ namespace MovieStore.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("MovieStore.DataAccess.Movie", b =>
+                {
+                    b.HasOne("MovieStore.DataAccess.Person", "Director")
+                        .WithMany("DirectingMovies")
+                        .HasForeignKey("DirectorId");
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieActor", b =>
+                {
+                    b.HasOne("MovieStore.DataAccess.Movie", "Movie")
+                        .WithMany("Actors")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MovieStore.DataAccess.Person", "Person")
+                        .WithMany("ActingInMovies")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieCompany", b =>
+                {
+                    b.HasOne("MovieStore.DataAccess.Company", "Company")
+                        .WithMany("Movies")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MovieStore.DataAccess.Movie", "Movie")
+                        .WithMany("Companies")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieCountry", b =>
+                {
+                    b.HasOne("MovieStore.DataAccess.Country", "Country")
+                        .WithMany("Movies")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MovieStore.DataAccess.Movie", "Movie")
+                        .WithMany("Countries")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.MovieGenre", b =>
+                {
+                    b.HasOne("MovieStore.DataAccess.Genre", "Genre")
+                        .WithMany("Movies")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MovieStore.DataAccess.Movie", "Movie")
+                        .WithMany("Genres")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("MovieStore.DataAccess.MovieOrder", b =>
                 {
                     b.HasOne("MovieStore.DataAccess.Movie", "Movie")
@@ -207,6 +370,14 @@ namespace MovieStore.DataAccess.Migrations
                     b.HasOne("MovieStore.DataAccess.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MovieStore.DataAccess.Person", b =>
+                {
+                    b.HasOne("MovieStore.DataAccess.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

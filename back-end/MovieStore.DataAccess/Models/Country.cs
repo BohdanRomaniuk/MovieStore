@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieStore.DataAccess
 {
-    public class Role
+    public class Country
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -11,5 +12,7 @@ namespace MovieStore.DataAccess
 
         [Required]
         public string Name { get; set; }
+
+        public List<MovieCountry> Movies { get; set; }
     }
 }
