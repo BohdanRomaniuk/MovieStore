@@ -21,7 +21,6 @@ export class Login extends Component {
             UserName: '',
             Password: '',
         };
-        console.log(props);
     }
 
     handleOnChangeUserName = (event) => {
@@ -32,8 +31,13 @@ export class Login extends Component {
         this.setState({ Password: event.target.value });
     }
 
+    handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            this.handleOnSubmit();
+        }
+    }
+
     handleOnSubmit = () => {
-        
         const url = `${apiUrl}/auth/login`;
         fetch(url, {
             method: "POST",
@@ -42,18 +46,20 @@ export class Login extends Component {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             }
-        }).then(response => {
-            if (!response.ok) {
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({ loggined: true });
+                this.props.onChangeLogin(true, result.lastName + ' ' + result.firstName, result.id, result.role, result.token);
+                setTimeout(() => { this.props.history.push("/") }, 1000);
+            },
+            (error) => {
                 this.setState({ loggined: false });
                 this.props.onChangeLogin(false);
                 this.setState({ message: "Помилка входу. Перевірте ім'я користувача та пароль!" });
             }
-            else {
-                this.setState({ loggined: true });
-                this.props.onChangeLogin(true);
-                setTimeout(() => { this.props.history.push("/") }, 1000);
-            }
-        });
+        );
     }
 
     render() {
@@ -70,11 +76,11 @@ export class Login extends Component {
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Пароль</Form.Label>
-                        <Form.Control type="password" onChange={this.handleOnChangePassword} placeholder="Пароль..." />
+                        <Form.Control type="password" onChange={this.handleOnChangePassword} placeholder="Пароль..." onKeyDown={this.handleKeyDown} />
                     </Form.Group>
                     <Button variant="outline-primary" style={{ float: "right" }} onClick={this.handleOnSubmit}>
                         Увійти
-                </Button>
+                    </Button>
                 </Form>
             </Styles>
         );

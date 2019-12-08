@@ -31,20 +31,27 @@ export class NavMenu extends Component {
             searchQuery: '',
             loggedIn: false,
             userName: '',
+            userRole: 'user',
             userId: 0
         };
     }
 
     componentDidMount() {
-        this.setState({ loggedIn: this.props.loggedIn, userName: this.props.userName, userId: this.props.userId });
+        this.setState({ loggedIn: this.props.loggedIn, userName: this.props.userName, userRole: this.props.userRole, userId: this.props.userId });
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ loggedIn: nextProps.loggedIn, userName: nextProps.userName, userId: nextProps.userId });
+        this.setState({ loggedIn: nextProps.loggedIn, userName: nextProps.userName, userRole: nextProps.userRole, userId: nextProps.userId });
     }
 
     handleOnChangeSearchQuery = (event) => {
         this.setState({ searchQuery: event.target.value });
+    }
+
+    handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            this.handleOnSubmit();
+        }
     }
 
     handleOnSubmit = () => {
@@ -69,7 +76,7 @@ export class NavMenu extends Component {
                             <Nav.Item>
                                 {(this.state.loggedIn) ?
                                     <Nav.Link>
-                                        <Link to={"/profile/" + this.state.userId}>Романюк Богдан</Link>
+                                        <Link to={"/profile/" + this.state.userId}>{this.state.userName}</Link>
                                     </Nav.Link>
                                     :
                                     <Nav.Link>
@@ -77,6 +84,14 @@ export class NavMenu extends Component {
                                     </Nav.Link>
                                 }
                             </Nav.Item>
+
+                            {(this.state.userRole === 'admin') ?
+                                <Nav.Item>
+                                    <Nav.Link>
+                                        <Link to="/addMovie">Додати фільм</Link>
+                                    </Nav.Link>
+                                </Nav.Item> : ''
+                            }
                             <Nav.Item>
                                 {(this.state.loggedIn) ?
                                     <Nav.Link>
@@ -90,7 +105,9 @@ export class NavMenu extends Component {
                             </Nav.Item>
                         </Nav>
                         <Form inline>
-                            <FormControl type="text" placeholder="Пошук..." onChange={this.handleOnChangeSearchQuery} className="mr-sm-2" />
+                            <FormControl type="text" placeholder="Пошук..."
+                                onChange={this.handleOnChangeSearchQuery}
+                                onKeyDown={this.handleKeyDown} className="mr-sm-2" />
                             <Button variant="outline-success" onClick={this.handleOnSubmit}>Пошук</Button>
                         </Form>
                     </Navbar.Collapse>

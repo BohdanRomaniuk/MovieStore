@@ -24,7 +24,6 @@ export class Home extends Component {
 
     reloadMovies = (query) => {
         var url = (typeof query === "undefined") ? `${apiUrl}/movie` : `${apiUrl}/movie/searchQuery=${query}`;
-        console.log(url);
         fetch(url)
             .then(res => res.json())
             .then(
