@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieStore.Services;
+using System;
 
 namespace MovieStore.Controllers
 {
@@ -15,8 +16,15 @@ namespace MovieStore.Controllers
         [HttpGet]
         public virtual IActionResult Get()
         {
-            var value = _service.Get();
-            return Ok(value);
+            try
+            {
+                var value = _service.Get();
+                return Ok(value);
+            }
+            catch(Exception ex)
+            {
+                return Ok(ex);
+            }
         }
 
         [HttpGet("{id}")]

@@ -1,4 +1,4 @@
-export const apiUrl = 'https://localhost:44338/api';
-export const posterUrl = 'https://localhost:44338/posters';
+export const apiUrl = 'https://moviestoreapi.azurewebsites.net/api';
+export const posterUrl = 'https://moviestoreapi.azurewebsites.net/posters';
 
 export default apiUrl;

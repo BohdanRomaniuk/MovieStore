@@ -46,43 +46,43 @@ namespace MovieStore
             //Services (BL)
 
             // Configure JWT authentication
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false; // For testing only
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = JWTConfigurator.ISSUER,
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //        .AddJwtBearer(options =>
+            //        {
+            //            options.RequireHttpsMetadata = false; // For testing only
+            //            options.TokenValidationParameters = new TokenValidationParameters
+            //            {
+            //                ValidateIssuer = true,
+            //                ValidIssuer = JWTConfigurator.ISSUER,
 
-                            ValidateAudience = false, // Will not validate audience
-                            ValidAudience = JWTConfigurator.AUDIENCE,
+            //                ValidateAudience = false, // Will not validate audience
+            //                ValidAudience = JWTConfigurator.AUDIENCE,
 
-                            ValidateLifetime = true,
+            //                ValidateLifetime = true,
 
-                            IssuerSigningKey = JWTConfigurator.GetSymmetricSecurityKey(),
-                            ValidateIssuerSigningKey = true,
-                        };
-                    });
+            //                IssuerSigningKey = JWTConfigurator.GetSymmetricSecurityKey(),
+            //                ValidateIssuerSigningKey = true,
+            //            };
+            //        });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("MovieStore", new Info { Title = "MovieStore API", Version = "1.0" });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    In = "header",
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    Type = "apiKey"
-                });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("MovieStore", new Info { Title = "MovieStore API", Version = "1.0" });
+            //    c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+            //    {
+            //        In = "header",
+            //        Description = "Please insert JWT with Bearer into field",
+            //        Name = "Authorization",
+            //        Type = "apiKey"
+            //    });
 
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                {
-                    { "Bearer", new string[] { } }
-                });
-            });
+            //    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+            //    {
+            //        { "Bearer", new string[] { } }
+            //    });
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -100,12 +100,12 @@ namespace MovieStore
             // Code to create migration in Package manager console:
             //     PM> add-migration <name> -project MovieStore.DataAccess
             // Migration will be applied automatically!
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<MovieStoreContext>();
-                context.Database.Migrate();
-                DataInitializer.Initialize(context);
-            }
+            //using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    var context = serviceScope.ServiceProvider.GetRequiredService<MovieStoreContext>();
+            //    context.Database.Migrate();
+            //    DataInitializer.Initialize(context);
+            //}
 
             app.UseCors(builder => builder.WithOrigins(Configuration.GetSection("ReactAppUrl").Value)
                     .AllowAnyOrigin()
@@ -116,11 +116,11 @@ namespace MovieStore
             app.UseAuthentication();
 
             // Swagger is here: localhost/swagger/index.html
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/MovieStore/swagger.json", "MovieStore API");
-            });
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/MovieStore/swagger.json", "MovieStore API");
+            //});
 
             // For the wwwroot folder
             app.UseStaticFiles(); 
