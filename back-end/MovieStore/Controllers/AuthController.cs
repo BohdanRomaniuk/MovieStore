@@ -41,7 +41,7 @@ namespace MovieStore.API.Controllers
 
             var identity = GetClaimsIdentity(identityDTO);
 
-            identityDTO.Token = JWTManager.GenerateToken(identity);
+            //identityDTO.Token = JWTManager.GenerateToken(identity);
 
             return Ok(identityDTO);
         }
@@ -74,7 +74,8 @@ namespace MovieStore.API.Controllers
 
             var identity = GetClaimsIdentity(registeredUser);
 
-            string token = JWTManager.GenerateToken(identity);
+            //string token = JWTManager.GenerateToken(identity);
+            var token = string.Empty;
 
             return Created(registeredUser.Id.ToString(), token);
         }
